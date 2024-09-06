@@ -1,0 +1,33 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net7.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <Configurations>Release;Debug</Configurations>
+        <Platforms>x86</Platforms>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <Reference Include="0Harmony">
+        <HintPath>..\..\BepInEx\5.4.23.2\0Harmony.dll</HintPath>
+      </Reference>
+      <Reference Include="BepInEx">
+        <HintPath>..\..\BepInEx\5.4.23.2\BepInEx.dll</HintPath>
+      </Reference>
+      <Reference Include="Blizzard.T5.Core">
+        <HintPath>..\..\..\Games\Hearthstone\Hearthstone_Data\Managed\Blizzard.T5.Core.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine">
+        <HintPath>..\..\..\Games\Hearthstone\BepInEx\unstripped_corlib\UnityEngine.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.CoreModule">
+        <HintPath>..\..\..\Games\Hearthstone\BepInEx\unstripped_corlib\UnityEngine.CoreModule.dll</HintPath>
+      </Reference>
+    </ItemGroup>
+
+    <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+      <Exec Command="copy &quot;$(TargetDir)HSFast.dll&quot; &quot;C:\rei\games\hearthstone\bepinex\plugins\HSFast.dll&quot;&#xA;" />
+    </Target>
+
+</Project>
