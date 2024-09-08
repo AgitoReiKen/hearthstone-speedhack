@@ -1,4 +1,5 @@
-﻿using BepInEx;
+﻿using Assets;
+using BepInEx;
 using BepInEx.Configuration;
 using BepInEx.Logging;
 using Blizzard.T5.Core.Time;
@@ -13,24 +14,38 @@ public class PluginInfo
 
 public enum TimeScaleEnum
 {
-    x1, 
+    X1, 
     X2,
     X3,
-    x6
+    X4,
+    X8
 }
 [BepInPlugin(PluginInfo.PLUGIN_GUID, PluginInfo.PLUGIN_NAME, PluginInfo.PLUGIN_VERSION)]
 public class Plugin : BaseUnityPlugin
 {
     private ConfigEntry<TimeScaleEnum> TimeScale;
+    private ConfigEntry<bool> TriggerReconnect;
     internal static new ManualLogSource Logger;
         
     private void Awake()
     {
         // Plugin startup logic
         TimeScale = Config.Bind("General", "TimeScale", TimeScaleEnum.X2, "Time scale of the game events");
+        TriggerReconnect = Config.Bind("General", "TriggerReconnect", false, "Will force reconnect to the game when switched on");
+        TriggerReconnect.SettingChanged += Reconnect;
         Logger = base.Logger;
         Logger.LogInfo($"Plugin {PluginInfo.PLUGIN_GUID} is loaded!");
          
+    }
+
+    private void Reconnect(object? sender, EventArgs e)
+    {
+        if (TriggerReconnect.Value)
+        {
+            Logger.LogInfo("Triggering reconnect");
+            ReconnectMgr.Get().ReconnectToGameFromGameplay();
+            TriggerReconnect.Value = false;
+        }
     }
 
     private void Update()
@@ -44,12 +59,16 @@ public class Plugin : BaseUnityPlugin
             case TimeScaleEnum.X3:
                 value = 3.0f;
                 break;
-            case TimeScaleEnum.x6:
-                value = 6.0f;
+            case TimeScaleEnum.X4:
+                value = 4.0f;
+                break;
+            case TimeScaleEnum.X8:
+                value = 8.0f;
                 break;
             default:
                 break;
         }
         TimeScaleMgr.Get().SetGameTimeScale(value);
-    }
+       
+    } 
 }
