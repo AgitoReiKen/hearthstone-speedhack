@@ -4,8 +4,8 @@
 
 ## Installation
 
-1. Download the latest `Full` and `Plugin` release from the [Releases](https://github.com/agitoreiken/hearthstone-speedhack/releases) page.
-2. Extract the contents of the `Full` into your Hearthstone game folder and place `HSFast.dll` into BepInEx/Plugins folder.
+1. Download the latest `Full` and `Plugin` releases from the [Releases](https://github.com/agitoreiken/hearthstone-speedhack/releases) page.
+2. Extract the contents of the `Full` into your Hearthstone game folder and place `HSFast.dll` from the `Plugin` into BepInEx/Plugins folder.
 
 **Example path:**
 `C:/Program Files/Hearthstone`
