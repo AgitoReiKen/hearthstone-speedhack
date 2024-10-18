@@ -1,6 +1,11 @@
 # HSFast: TimeScale Control Plugin for Hearthstone
 
-**HSFast** is a simple BepInEx plugin that allows you to control the TimeScale value in Hearthstone. It integrates with ConfigurationManager to provide an in-game menu for easy adjustments.
+**HSFast** is a simple BepInEx plugin that allows you to control the TimeScale value in Hearthstone. 
+
+It integrates with ConfigurationManager to provide an in-game menu for easy adjustments.
+## Features
+1. **TimeScale** - value used to speedup animations
+2. **TriggerReconnect** - function used to reconnect to the match
 
 ## Installation
 
