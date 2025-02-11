@@ -19,6 +19,8 @@ It integrates with ConfigurationManager to provide an in-game menu for easy adju
 
 1. Launch the game.
 2. Press **F1** to open the configuration menu.
+![изображение](https://github.com/user-attachments/assets/e4b9bfff-0e6c-449c-8ecc-5c0293cf8a12)
+
 3. Adjust the **HSFast TimeScale** value to your preference.
 
 That's it! You can now enjoy the custom TimeScale settings in-game.
