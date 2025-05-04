@@ -1,79 +1,117 @@
 ﻿using System;
+using System.Collections;
+using System.Globalization;
+using System.Reflection;
 using Assets;
 using BepInEx;
 using BepInEx.Configuration;
 using BepInEx.Logging;
 using Blizzard.T5.Core.Time;
 using JetBrains.Annotations;
+using HarmonyLib;
+using Hearthstone;
+using Hearthstone.LookDev;
+using HearthstoneTelemetry;
+using UnityEngine;
 
 namespace HSFast
 {
+    [HarmonyPatch(typeof(TimeScaleMgr))]
+    public class TimeScaleMgrPatch
+    {
+        [HarmonyPrefix]
+        [HarmonyPatch("Update")]
+        static bool Update()
+        {   
+            return false;
+        }
+    }  
+    [HarmonyPatch(typeof(TelemetryManager))]
+    public class TelemetryManagerPatch
+    {
+        [HarmonyPostfix]
+        [HarmonyPatch("Client")]
+        static void Client(ref ITelemetryClient __result)
+        {
+            Plugin.Logger.LogDebug("TelemetryRequest");
+            __result = Plugin.TelemetryClient;
+        }
+        
+    }   
+    [HarmonyPatch(typeof(BoardEventListener))]
+    public class BoardEventListenerPatch
+    {
+        [HarmonyPrefix]
+        [HarmonyPatch("TriggerAnimation")]
+        static bool TriggerAnimation(string triggerName)
+        {
+            return false;
+        }
+    }
+    
     public class PluginInfo
     {
         public const string PLUGIN_GUID = "com.agitoreiken.hsfast";
         public const string PLUGIN_NAME = "HSFast";
         public const string PLUGIN_VERSION = "1.0.0";
     }
-
-    public enum TimeScaleEnum
-    {
-        X1,
-        X2,
-        X3,
-        X4,
-        X8
-    }
-
+    
     [BepInPlugin(PluginInfo.PLUGIN_GUID, PluginInfo.PLUGIN_NAME, PluginInfo.PLUGIN_VERSION)]
-    public class Plugin : BaseUnityPlugin
+    public class Plugin : BaseUnityPlugin 
     {
-        private ConfigEntry<TimeScaleEnum> TimeScale;
-        private ConfigEntry<bool> TriggerReconnect;
-        internal static new ManualLogSource Logger;
-
+        private ConfigEntry<float> CfgTimeScale;
+        private ConfigEntry<bool> CfgTriggerReconnect;
+        private ConfigEntry<bool> CfgDisableTelemetry;
+        public static TelemetryPatch TelemetryClient = new TelemetryPatch();
+        public static new ManualLogSource Logger;
+        private float Speed;
         private void Awake()
         {
             // Plugin startup logic
-            TimeScale = Config.Bind("General", "TimeScale", TimeScaleEnum.X2, "Time scale of the game events");
-            TriggerReconnect = Config.Bind("General", "TriggerReconnect", false,
+            CfgTimeScale = Config.Bind("General", "TimeScale", 2.0f, "Time scale of the game events");
+            CfgDisableTelemetry = Config.Bind("General", "DisableTelemetry", false, "Disables gathering data by blizzard");
+            CfgTriggerReconnect = Config.Bind("General", "TriggerReconnect", false,
                 "Will force reconnect to the game when switched on");
-            TriggerReconnect.SettingChanged += Reconnect;
+            CfgTriggerReconnect.SettingChanged += TriggerReconnect;   
+            
             Logger = base.Logger;
+            Harmony.CreateAndPatchAll(typeof(TimeScaleMgrPatch));
+            Harmony.CreateAndPatchAll(typeof(TelemetryPatch));
+            Speed = CfgTimeScale.Value;
             Logger.LogInfo($"Plugin {PluginInfo.PLUGIN_GUID} is loaded!");
         }
-
-        private void Reconnect([CanBeNull] object sender, EventArgs e)
+     
+        private void TriggerReconnect([CanBeNull] object sender, EventArgs e)
         {
-            if (TriggerReconnect.Value)
+            if (CfgTriggerReconnect.Value)
             {
                 Logger.LogInfo("Triggering reconnect");
+                //GameMgr.Get().RestartGame();
                 ReconnectMgr.Get().ReconnectToGameFromGameplay();
-                TriggerReconnect.Value = false;
+                CfgTriggerReconnect.Value = false;
             }
+        }
+       
+        private void OnDestroy()
+        {
+            Logger.LogError("HSFast::OnDestroy called!");
         }
 
         private void Update()
         {
-            float value = 1.0f;
-            switch (TimeScale.Value)
+            if (Input.GetKeyDown(KeyCode.F2))
             {
-                case TimeScaleEnum.X2:
-                    value = 2.0f;
-                    break;
-                case TimeScaleEnum.X3:
-                    value = 3.0f;
-                    break;
-                case TimeScaleEnum.X4:
-                    value = 4.0f;
-                    break;
-                case TimeScaleEnum.X8:
-                    value = 8.0f;
-                    break;
-                default:
-                    break;
+                Speed = Math.Max(1, Speed - 1);
+                CfgTimeScale.Value = Speed;
             }
 
-            TimeScaleMgr.Get().SetGameTimeScale(value);
+            if (Input.GetKeyDown(KeyCode.F3))
+            {
+                Speed = Math.Min(8, Speed + 1);
+                CfgTimeScale.Value = Speed;
+            }
+            UnityEngine.Time.timeScale = Speed;
+            Cursor.visible = true;
         }
     }
 }

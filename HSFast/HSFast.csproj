@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net46</TargetFramework>
+        <TargetFramework>net472</TargetFramework>
         <Configurations>Release;Debug</Configurations>
         <Platforms>x86</Platforms>
     </PropertyGroup>
@@ -16,15 +16,32 @@
       <Reference Include="BepInEx">
         <HintPath>..\..\BepInEx\5.4.23.2\BepInEx.dll</HintPath>
       </Reference>
+      <Reference Include="blizzard.bgsclient">
+        <HintPath>..\..\..\Games\Hearthstone\Hearthstone_Data\Managed\blizzard.bgsclient.dll</HintPath>
+      </Reference>
       <Reference Include="Blizzard.T5.Core">
         <HintPath>..\..\..\Games\Hearthstone\Hearthstone_Data\Managed\Blizzard.T5.Core.dll</HintPath>
       </Reference>
-      <Reference Include="UnityEngine">
-        <HintPath>..\..\..\Games\Hearthstone\BepInEx\unstripped_corlib\UnityEngine.dll</HintPath>
+    <Reference Include="Blizzard.T5.Core">
+        <HintPath>..\..\..\Games\Hearthstone\Hearthstone_Data\Managed\Blizzard.T5.Core.dll</HintPath>
       </Reference>
-      <Reference Include="UnityEngine.CoreModule">
-        <HintPath>..\..\..\Games\Hearthstone\BepInEx\unstripped_corlib\UnityEngine.CoreModule.dll</HintPath>
-      </Reference>
+    <Reference Include="Blizzard.Telemetry.Identity">
+      <HintPath>..\..\..\Games\Hearthstone\Hearthstone_Data\Managed\Blizzard.Telemetry.Identity.dll</HintPath>
+    </Reference>
+    <Reference Include="Blizzard.Telemetry.Sdk">
+      <HintPath>..\..\..\Games\Hearthstone\Hearthstone_Data\Managed\Blizzard.Telemetry.Sdk.dll</HintPath>
+    </Reference>
+    <Reference Include="Blizzard.Telemetry.StandardProtos.BlizzPbc">
+      <HintPath>..\..\..\Games\Hearthstone\Hearthstone_Data\Managed\Blizzard.Telemetry.StandardProtos.BlizzPbc.dll</HintPath>
+    </Reference>
+    <Reference Include="Google.Protobuf">
+      <HintPath>..\..\..\Games\Hearthstone\Hearthstone_Data\Managed\Google.Protobuf.dll</HintPath>
+    </Reference>
+    <Reference Include="mscorlib" />
+    <Reference Include="netstandard" />
+    <Reference Include="UnityEngine">
+      <HintPath>..\..\..\Software\Unity\Engine\2022.3.52f1\Editor\Data\Managed\UnityEngine.dll</HintPath>
+    </Reference>
     </ItemGroup>
 
     <Target Name="PostBuild" AfterTargets="PostBuildEvent">
