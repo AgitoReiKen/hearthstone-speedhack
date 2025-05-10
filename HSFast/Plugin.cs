@@ -6,13 +6,18 @@ using Assets;
 using BepInEx;
 using BepInEx.Configuration;
 using BepInEx.Logging;
+using Blizzard.GameService.SDK.Client.Integration;
 using Blizzard.T5.Core.Time;
 using JetBrains.Annotations;
 using HarmonyLib;
 using Hearthstone;
+using Hearthstone.Core.Streaming;
 using Hearthstone.LookDev;
+using Hearthstone.Streaming;
 using HearthstoneTelemetry;
+using Networking;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace HSFast
 {
@@ -87,7 +92,10 @@ namespace HSFast
             {
                 Logger.LogInfo("Triggering reconnect");
                 //GameMgr.Get().RestartGame();
-                ReconnectMgr.Get().ReconnectToGameFromGameplay();
+                GameServerInfo gs = Network.Get().GetLastGameServerJoined();
+                Network.Get().DisconnectFromGameServer(Network.DisconnectReason.GameState_Reconnect);
+                Network.Get().GotoGameServer(gs, true); 
+                SceneMgr.Get().ReloadMode();
                 CfgTriggerReconnect.Value = false;
             }
         }
