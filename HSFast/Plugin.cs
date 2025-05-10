@@ -99,6 +99,7 @@ namespace HSFast
 
         private void Update()
         {
+            Speed = CfgTimeScale.Value;
             if (Input.GetKeyDown(KeyCode.F2))
             {
                 Speed = Math.Max(1, Speed - 1);
@@ -108,6 +109,11 @@ namespace HSFast
             if (Input.GetKeyDown(KeyCode.F3))
             {
                 Speed = Math.Min(8, Speed + 1);
+                CfgTimeScale.Value = Speed;
+            }
+
+            if (Math.Abs(Speed - CfgTimeScale.Value) > 0.01f)
+            {
                 CfgTimeScale.Value = Speed;
             }
             UnityEngine.Time.timeScale = Speed;
