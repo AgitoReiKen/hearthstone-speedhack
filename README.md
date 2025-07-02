@@ -9,8 +9,8 @@ It integrates with ConfigurationManager to provide an in-game menu for easy adju
 
 ## Installation
 
-1. Download the latest `Full` and `Plugin` releases from the [Releases](https://github.com/agitoreiken/hearthstone-speedhack/releases) page.
-2. Extract the contents of the `Full` into your Hearthstone game folder and place `HSFast.dll` from the `Plugin` into BepInEx/Plugins folder.
+1. Download the latest `Full` release from the [Releases](https://github.com/agitoreiken/hearthstone-speedhack/releases) page.
+2. Extract the contents of the `Full` into your Hearthstone game folder.
 
 **Example path:**
 `C:/Program Files/Hearthstone`
