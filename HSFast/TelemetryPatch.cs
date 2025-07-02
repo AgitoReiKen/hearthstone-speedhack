@@ -465,6 +465,29 @@ namespace HSFast
             
         }
 
+        public void SendLuckyDrawInsufficientVC(int luckyDrawBoxId, bool vcWasBought, long vcBundlePmtProductId, int vcAmount,
+            int pullIndex, bool pullWasBought)
+        {
+        }
+
+        public void SendLuckyDrawPageEntered(int luckyDrawBoxId, LuckyDrawPageEntered.LuckyDrawEntryPoint entryPoint)
+        {
+        }
+
+        public void SendLuckyDrawPreviewReward(int luckyDrawBoxId, int rewardId, string rewardName, List<int> itemIds, List<int> itemAssetIds,
+            List<string> itemTypes, List<string> itemNames)
+        {
+        }
+
+        public void SendLuckyDrawPullPurchased(int luckyDrawBoxId, int pullIndex, long pmtProductId, long pmtLicenseId)
+        {
+        }
+
+        public void SendLuckyDrawRewardItemFavorited(int luckyDrawBoxId, int rewardItemId, int rewardItemAssetId,
+            string rewardItemType, string rewardItemName)
+        {
+        }
+
         public void SendManaFilterToggleOff()
         {
             

@@ -81,7 +81,15 @@ namespace HSFast
             
             Logger = base.Logger;
             Harmony.CreateAndPatchAll(typeof(TimeScaleMgrPatch));
-            Harmony.CreateAndPatchAll(typeof(TelemetryPatch));
+            try
+            {
+                Harmony.CreateAndPatchAll(typeof(TelemetryPatch));
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError("Failed to apply TelemetryPatch");
+                Logger.LogError(ex.Message);
+            }
             Speed = CfgTimeScale.Value;
             Logger.LogInfo($"Plugin {PluginInfo.PLUGIN_GUID} is loaded!");
         }
