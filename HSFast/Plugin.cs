@@ -31,18 +31,7 @@ namespace HSFast
             return false;
         }
     }  
-    [HarmonyPatch(typeof(TelemetryManager))]
-    public class TelemetryManagerPatch
-    {
-        [HarmonyPostfix]
-        [HarmonyPatch("Client")]
-        static void Client(ref ITelemetryClient __result)
-        {
-            Plugin.Logger.LogDebug("TelemetryRequest");
-            __result = Plugin.TelemetryClient;
-        }
-        
-    }   
+    
     [HarmonyPatch(typeof(BoardEventListener))]
     public class BoardEventListenerPatch
     {
@@ -66,30 +55,18 @@ namespace HSFast
     {
         private ConfigEntry<float> CfgTimeScale;
         private ConfigEntry<bool> CfgTriggerReconnect;
-        private ConfigEntry<bool> CfgDisableTelemetry;
-        public static TelemetryPatch TelemetryClient = new TelemetryPatch();
         public static new ManualLogSource Logger;
         private float Speed;
         private void Awake()
         {
             // Plugin startup logic
             CfgTimeScale = Config.Bind("General", "TimeScale", 2.0f, "Time scale of the game events");
-            CfgDisableTelemetry = Config.Bind("General", "DisableTelemetry", false, "Disables gathering data by blizzard");
             CfgTriggerReconnect = Config.Bind("General", "TriggerReconnect", false,
                 "Will force reconnect to the game when switched on");
             CfgTriggerReconnect.SettingChanged += TriggerReconnect;   
             
             Logger = base.Logger;
             Harmony.CreateAndPatchAll(typeof(TimeScaleMgrPatch));
-            try
-            {
-                Harmony.CreateAndPatchAll(typeof(TelemetryPatch));
-            }
-            catch (Exception ex)
-            {
-                Logger.LogError("Failed to apply TelemetryPatch");
-                Logger.LogError(ex.Message);
-            }
             Speed = CfgTimeScale.Value;
             Logger.LogInfo($"Plugin {PluginInfo.PLUGIN_GUID} is loaded!");
         }
